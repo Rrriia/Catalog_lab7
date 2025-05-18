@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "Smartphone",
+      "shortname": "smartphone",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "price": "$250"
+    },
+    {
+      "id": 2,
+      "name": "Tablet",
+      "shortname": "tablet",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "price": "$300"
+    },
+    {
+      "id": 3,
+      "name": "Laptop",
+      "shortname": "laptop",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "price": "$800"
+    },
+    {
+      "id": 4,
+      "name": "Smartwatch",
+      "shortname": "smartwatch",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "price": "$150"
+    }
+  ]
+}
