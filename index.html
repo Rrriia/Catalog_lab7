@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Junk shop</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    .card {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <span class="navbar-brand">Junk shop</span>
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="#" id="homeLink">Home</a>
+      <a class="nav-item nav-link" href="#" id="catalogLink">Catalog</a>
+    </div>
+  </nav>
+
+  <div id="content" class="mt-4">
+    <h3>Buy things because you like them!</h3>
+  </div>
+</div>
+
+<script>
+  // Обробник для "Додому" – перезавантаження сторінки
+  document.getElementById("homeLink").addEventListener("click", function(e) {
+    e.preventDefault();
+    location.reload();
+  });
+
+  // Обробник для "Каталог" – завантаження списку категорій
+  document.getElementById("catalogLink").addEventListener("click", function(e) {
+    e.preventDefault();
+    loadCategories();
+  });
+
+
+  function loadCategories() {
+    fetch('values/categories.json')
+      .then(response => response.json())
+      .then(data => {
+        const contentDiv = document.getElementById("content");
+        let html = '<h2>Catagories</h2>';
+
+        // Створення посилань для кожної категорії
+        data.categories.forEach(category => {
+          html += `<a href="#" class="d-block mb-2 category-link" data-shortname="${category.shortname}" data-name="${category.name}">${category.name}</a>`;
+        });
+
+        // Додаємо посилання "Specials" після переліку категорій
+        html += `<a href="#" id="specialsLink" class="d-block mt-3">Specials</a>`;
+        contentDiv.innerHTML = html;
+
+        // Призначаємо обробники для посилань категорій
+        const categoryLinks = document.querySelectorAll('.category-link');
+        categoryLinks.forEach(link => {
+          link.addEventListener("click", function(e) {
+            e.preventDefault();
+            const shortname = link.getAttribute('data-shortname');
+            const name = link.getAttribute('data-name');
+            loadCategoryItems({ name: name, shortname: shortname });
+          });
+        });
+
+        // Обробник для "Specials": кожного разу робиться запит, щоб вибрати випадкову категорію
+        document.getElementById('specialsLink').addEventListener("click", handleSpecialsClick);
+      })
+      .catch(error => {
+        console.error("Помилка завантаження категорій:", error);
+      });
+  }
+
+
+  function handleSpecialsClick(e) {
+    e.preventDefault();
+
+    fetch('values/categories.json')
+      .then(response => response.json())
+      .then(data => {
+        let randIndex = Math.floor(Math.random() * data.categories.length);
+        let randomCategory = data.categories[randIndex];
+        console.log("Випадково обрана категорія (Specials):", randomCategory.name);
+        loadCategoryItems(randomCategory);
+      })
+      .catch(error => console.error("Помилка при завантаженні для Specials:", error));
+  }
+
+
+  function loadCategoryItems(category) {
+    console.log("Завантаження категорії:", category);
+    fetch('values/' + category.shortname + '.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("HTTP error " + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        const contentDiv = document.getElementById("content");
+        let html = `<h2>${category.name}</h2>`;
+        html += '<div class="row">';
+
+        if (data.items && data.items.length > 0) {
+          data.items.forEach(item => {
+            html += `
+              <div class="col-md-4 mb-3">
+                <div class="card" style="width: 18rem;">
+                  <img class="card-img-top" src="https://place-hold.it/200x200?text=${encodeURIComponent(item.name)}" alt="${item.name}">
+                  <div class="card-body">
+                    <h5 class="card-title">${item.name}</h5>
+                    <p class="card-text">${item.description}</p>
+                    <p class="card-text">Ціна: ${item.price}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+        } else {
+          html += "<div class='col-12'><p>Немає елементів для відображення.</p></div>";
+        }
+        html += '</div>';
+        contentDiv.innerHTML = html;
+      })
+      .catch(error => {
+        console.error("Помилка завантаження елементів категорії:", error);
+        document.getElementById("content").innerHTML = "<p>Виникла помилка при завантаженні даних.</p>";
+      });
+  }
+</script>
+
+</body>
+</html>
