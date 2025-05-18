@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "name": "Novel",
+      "shortname": "novel",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "price": "$15"
+    },
+    {
+      "id": 2,
+      "name": "Detective",
+      "shortname": "detective",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "price": "$12"
+    },
+    {
+      "id": 3,
+      "name": "Science",
+      "shortname": "science",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "price": "$25"
+    },
+    {
+      "id": 4,
+      "name": "Biography",
+      "shortname": "biography",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "price": "$18"
+    }
+  ]
+}
